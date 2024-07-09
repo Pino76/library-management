@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('reserve');;
             $table->integer('year');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

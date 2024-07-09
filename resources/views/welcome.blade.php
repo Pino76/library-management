@@ -127,6 +127,17 @@
                         Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
                     </div>
                 </div>
+                <!-- da cancellare -->
+                <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
+                    <div class="text-sm text-gray-500 dark:text-gray-400 sm:ml-0">
+                       <ul>
+                           <li><a href="books"> lista | update | delete </a></li>
+                           <li> create </li>
+                           <li> serch </li>
+                       </ul>
+                    </div>
+                </div>
+                <!-- da cancellare -->
             </div>
         </div>
     </body>

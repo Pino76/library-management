@@ -2,63 +2,123 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\DTO\BookDTO;
+use App\Http\Requests\Book\BookRequest;
+use App\Http\Requests\Book\SearchBookRequest;
+use App\Interfaces\Service\IBookService;
+
+use App\Interfaces\Service\IGenreService;
+use App\Models\Book;
+
 
 class BookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    private IBookService $bookService;
+    private IGenreService $genreService;
+
+
+    public function __construct(IBookService $bookService, IGenreService $genreService)
+    {
+        $this->bookService = $bookService;
+        $this->genreService = $genreService;
+
+    }
+
     public function index()
     {
-        //
+        $books = $this->bookService->getAllBooks();
+        $genres = $this->genreService->getAllGenre();
+
+        return view('book/index', [
+            "books" => $books,
+            "genres" => $genres
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $genres = $this->genreService->getAllGenre();
+        return view('book/create', [
+            "genres" => $genres
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function store(BookRequest $request)
     {
-        //
+        $bookDTO = new BookDTO(
+            null,
+            $request->title ,
+            $request->isbn ,
+            $request->author ,
+            $request->genre_id ,
+            $request->quantity ,
+            $request->reserve ,
+            $request->year
+        );
+
+        $this->bookService->saveBook($bookDTO);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Book $book)
     {
-        //
+        #non utilizzato
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function search(SearchBookRequest $request)
     {
-        //
+        $books = $this->bookService->searchBook($request);
+        $genres = $this->genreService->getAllGenre();
+        return view('book/index', [
+            "books" => $books,
+            "genres" => $genres,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function edit(Book $book)
     {
-        //
+        $genres = $this->genreService->getAllGenre();
+        return view('book.edit', [
+            "book" => $book,
+            "genres" => $genres
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function update(BookRequest $request, Book $book)
     {
-        //
+        $bookDTO = new BookDTO(
+            $book->id,
+            $request->title ,
+            $request->isbn ,
+            $request->author ,
+            $request->genre_id ,
+            $request->quantity ,
+            $book->reserve,
+            $request->year
+        );
+        $this->bookService->saveBook($bookDTO, $book);
     }
+
+    public function destroy(Book $book)
+    {
+        $this->bookService->deleteBook($book);
+    }
+
+    public function reserve(Book $book)
+    {
+        //TODO: recuperare anche user e controllare se ha già il libro prenotato oppure è nuovo
+        $bookDTO = new BookDTO(
+            $book->id,
+            $book->title ,
+            $book->isbn ,
+            $book->author ,
+            $book->genre_id ,
+            $book->quantity ,
+            $book->reserve ,
+            $book->year
+        );
+        $this->bookService->reserveBook($bookDTO);
+    }
+
 }

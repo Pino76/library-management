@@ -1,7 +1,8 @@
 <?php
 
-namespace app\Interfaces\Service;
+namespace App\Interfaces\Service;
 
+use Illuminate\Database\Eloquent\Collection;
 interface IGenreService
 {
     public function getAllGenre(): Collection;

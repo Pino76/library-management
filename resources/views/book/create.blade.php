@@ -31,8 +31,8 @@
     <br/>
     <select name="genre_id">
         <option value="0">Seleziona</option>
-        @foreach($genres AS $value)
-            <option value="{{$value->id}}">{{$value->genre}}</option>
+        @foreach($genres AS $genre)
+            <option value="{{$genre->id}}">{{$genre->name}}</option>
         @endforeach
     </select>
     @error('genre_id')

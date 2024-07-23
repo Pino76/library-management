@@ -13,7 +13,7 @@ class Genre extends Model
     public const TABLE_NAME = 'genres';
     protected $table = self::TABLE_NAME;
     protected $primaryKey = 'id';
-    protected $fillable = ['genre'];
+    protected $fillable = ['name'];
 
 
     public function book(): BelongsTo

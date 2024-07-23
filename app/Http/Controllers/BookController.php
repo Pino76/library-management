@@ -64,15 +64,27 @@ class BookController extends Controller
     public function show(Book $book)
     {
         #non utilizzato
+        return false;
     }
 
+    public function viewSearch()
+    {
+        $genres = $this->genreService->getAllGenre();
+        return view('book/search',[
+            "genres" => $genres,
+            "books" => "",
+            "bCount" => ""
+        ]);
+    }
     public function search(SearchBookRequest $request)
     {
         $books = $this->bookService->searchBook($request);
+
         $genres = $this->genreService->getAllGenre();
-        return view('book/index', [
+        return view('book/search', [
             "books" => $books,
             "genres" => $genres,
+            "bCount" => $books->count()
         ]);
     }
 
@@ -107,6 +119,7 @@ class BookController extends Controller
 
     public function reserve(Book $book)
     {
+        dd(auth()->id());
         //TODO: recuperare anche user e controllare se ha già il libro prenotato oppure è nuovo
         $bookDTO = new BookDTO(
             $book->id,

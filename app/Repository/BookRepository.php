@@ -50,11 +50,11 @@ class BookRepository implements IBookRepository
     public function search(BookDTO $bookDTO): Collection
     {
         $books = Book::query()->when(($bookDTO->getTitle() != ""), function ($query) use ($bookDTO) {
-            return $query->where("title", "like", "%" . $bookDTO->getTitle() . "%");
+            return $query->where("title", "like", $bookDTO->getTitle());
         })->when(($bookDTO->getAuthor() != ""), function ($query) use ($bookDTO) {
-            return $query->where("author", "like", "%" . $bookDTO->getAuthor() . "%");
+            return $query->where("author", "like", $bookDTO->getAuthor());
         })->when(($bookDTO->getGenreId() != 0), function ($query) use ($bookDTO) {
-            return $query->where("genre_id", "like", "%" . $bookDTO->getGenreId() . "%");
+            return $query->where("genre_id", "like", $bookDTO->getGenreId());
         });
 
         return $books->get();

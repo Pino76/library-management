@@ -96,6 +96,7 @@ class BookService implements IBookService
 
     public function reserveBook(BookDTO $book)
     {
+
         // TODO: Controllo se user ha già prenotato il libro
         if($book->getQuantity() > 0 && $book->getReserve() > 0){
             Log::info("prenotazioni: " . $book->getReserve());

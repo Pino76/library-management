@@ -6,9 +6,9 @@ use App\DTO\BookDTO;
 use App\Http\Requests\Book\BookRequest;
 use App\Http\Requests\Book\SearchBookRequest;
 use App\Interfaces\Service\IBookService;
-
 use App\Interfaces\Service\IGenreService;
 use App\Models\Book;
+use Illuminate\Support\Facades\Auth;
 
 
 class BookController extends Controller
@@ -79,7 +79,6 @@ class BookController extends Controller
     public function search(SearchBookRequest $request)
     {
         $books = $this->bookService->searchBook($request);
-
         $genres = $this->genreService->getAllGenre();
         return view('book/search', [
             "books" => $books,
@@ -119,8 +118,6 @@ class BookController extends Controller
 
     public function reserve(Book $book)
     {
-        dd(auth()->id());
-        //TODO: recuperare anche user e controllare se ha già il libro prenotato oppure è nuovo
         $bookDTO = new BookDTO(
             $book->id,
             $book->title ,
@@ -131,7 +128,7 @@ class BookController extends Controller
             $book->reserve ,
             $book->year
         );
-        $this->bookService->reserveBook($bookDTO);
+        $this->bookService->reserveBook($bookDTO, Auth::id());
     }
 
 }

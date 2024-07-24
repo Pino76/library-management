@@ -12,5 +12,5 @@ interface IBookService
     public function saveBook(BookDTO $bookDTO): Book;
     public function deleteBook(Book $book);
     public function searchBook(Request $request);
-    public function reserveBook(BookDTO $book);
+    public function reserveBook(BookDTO $book, $user_id);
 }

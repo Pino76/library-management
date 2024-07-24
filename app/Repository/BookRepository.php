@@ -5,7 +5,11 @@ namespace App\Repository;
 use App\DTO\BookDTO;
 use App\Interfaces\Repository\IBookRepository;
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class BookRepository implements IBookRepository
 {
@@ -30,8 +34,15 @@ class BookRepository implements IBookRepository
      */
     public function save(BookDTO $bookDTO): Book
     {
-        $bookArray = $bookDTO->toArray();
-        return Book::query()->updateOrCreate(["id" => $bookDTO->getId()], $bookArray);
+        $userId = Auth::id();
+
+        return DB::transaction(function() use ($bookDTO, $userId) {
+            $bookArray = $bookDTO->toArray();
+            $book = Book::updateOrCreate(['id' => $bookDTO->getId()], $bookArray);
+            $book->users()->attach($userId);
+            return $book;
+        }, 2);
+
     }
 
     /**
@@ -49,15 +60,25 @@ class BookRepository implements IBookRepository
      */
     public function search(BookDTO $bookDTO): Collection
     {
-        $books = Book::query()->when(($bookDTO->getTitle() != ""), function ($query) use ($bookDTO) {
-            return $query->where("title", "like", $bookDTO->getTitle());
-        })->when(($bookDTO->getAuthor() != ""), function ($query) use ($bookDTO) {
-            return $query->where("author", "like", $bookDTO->getAuthor());
-        })->when(($bookDTO->getGenreId() != 0), function ($query) use ($bookDTO) {
-            return $query->where("genre_id", "like", $bookDTO->getGenreId());
-        });
+        $userId = Auth::id();
+        $books = Book::query()
+            ->leftJoin('book_user', function ($join) use ($userId) {
+                $join->on('books.id', '=', 'book_user.book_id')
+                    ->where('book_user.user_id', '=', $userId);
+            })
+            ->select('books.*', DB::raw('IF(book_user.user_id IS NULL, 0, 1) as is_assigned'))
+            ->when($bookDTO->getTitle() != "", function ($query) use ($bookDTO) {
+                return $query->where("title", "like", $bookDTO->getTitle());
+            })
+            ->when($bookDTO->getAuthor() != "", function ($query) use ($bookDTO) {
+                return $query->where("author", "like", $bookDTO->getAuthor());
+            })
+            ->when($bookDTO->getGenreId() != 0, function ($query) use ($bookDTO) {
+                return $query->where("genre_id", $bookDTO->getGenreId());
+            })
+            ->get();
 
-        return $books->get();
+        return $books;
     }
 
 

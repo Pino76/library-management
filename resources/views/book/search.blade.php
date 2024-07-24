@@ -13,8 +13,8 @@
                     <section>
                         <header>
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                {{ __('Ricerca Libro') }} {{ Auth::user() }} libro cercato{{$books}}
-                                conta {{$bCount}}
+                                {{ __('Ricerca Libro') }}
+                                id-utente {{ Auth::user()->id }}
                             </h2>
 
                         </header>
@@ -61,9 +61,8 @@
             <div class="space-y-10">&nbsp</div>
 
             @if($bCount != "")
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
-                     style="border: 1px solid #F00">
-                    <div class="p-6 text-gray-900 dark:text-gray-100" style="border: 1px solid #000">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
 
                         <section>
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -100,7 +99,7 @@
                                 @forelse($books AS $book)
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            {{$book->title}}
+                                           {{$book->title}}
                                         </td>
                                         <td class="px-6 py-4 font-medium text-gray-900 text-center">
                                             {{$book->isbn}}
@@ -118,14 +117,14 @@
                                             {{$book->reserve}}
                                         </td>
                                         <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            @if($book->reserve > 0)
+                                            @if($book->reserve > 0 &&  $book->is_assigned == 0 )
                                             <form method="POST" action="{{route("reserve-book", ["book"=> $book])}}">
                                                 @method("PUT")
                                                 @csrf
                                                 <x-primary-button>{{ __('reserve') }}</x-primary-button>
                                             </form>
                                             @else
-                                                libro non disponibile
+                                                {{$book->reserve == 0 ? 'il libro non è disponibile' : 'il libro è presente nella tua lista' }}
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 font-medium text-gray-900 text-center">

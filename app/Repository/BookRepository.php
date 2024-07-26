@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\DTO\BookDTO;
+use App\Enum\UserRoles;
 use App\Interfaces\Repository\IBookRepository;
 use App\Models\Book;
 use App\Models\User;
@@ -35,11 +36,12 @@ class BookRepository implements IBookRepository
     public function save(BookDTO $bookDTO): Book
     {
         $userId = Auth::id();
-
         return DB::transaction(function() use ($bookDTO, $userId) {
             $bookArray = $bookDTO->toArray();
             $book = Book::updateOrCreate(['id' => $bookDTO->getId()], $bookArray);
-            $book->users()->attach($userId);
+            if($userId == UserRoles::USER){
+                $book->users()->attach($userId);
+            }
             return $book;
         }, 2);
 

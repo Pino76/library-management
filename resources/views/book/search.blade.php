@@ -6,15 +6,14 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <section>
                         <header>
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                {{ __('Ricerca Libro') }}
-                                id-utente {{ Auth::user()->id }}
+                                {{ __('Search Book') }}
                             </h2>
 
                         </header>
@@ -57,9 +56,6 @@
                 </div>
             </div>
 
-
-            <div class="space-y-10">&nbsp</div>
-
             @if($bCount != "")
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -88,11 +84,17 @@
                                         Available
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Reserve
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
                                         Year
                                     </th>
+                                    @if(Auth::user()->role_id == \App\Enum\UserRoles::USER)
+                                    <th scope="col" class="px-6 py-3">
+                                        Reserve
+                                    </th>
+                                    @else
+                                    <th scope="col" class="px-6 py-3" colspan="2">
+                                        Admin Action
+                                    </th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -117,19 +119,35 @@
                                             {{$book->reserve}}
                                         </td>
                                         <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                            {{$book->year}}
+                                        </td>
+                                        @if(Auth::user()->role_id == \App\Enum\UserRoles::USER)
+                                        <td class="px-6 py-4 font-medium text-gray-900 text-center">
                                             @if($book->reserve > 0 &&  $book->is_assigned == 0 )
-                                            <form method="POST" action="{{route("reserve-book", ["book"=> $book])}}">
-                                                @method("PUT")
-                                                @csrf
-                                                <x-primary-button>{{ __('reserve') }}</x-primary-button>
-                                            </form>
+                                                <form method="POST" action="{{route("reserve-book", ["book"=> $book])}}">
+                                                    @method("PUT")
+                                                    @csrf
+                                                    <x-primary-button>{{ __('reserve') }}</x-primary-button>
+                                                </form>
                                             @else
                                                 {{$book->reserve == 0 ? 'il libro non è disponibile' : 'il libro è presente nella tua lista' }}
                                             @endif
                                         </td>
+                                        @else
                                         <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            {{$book->year}}
+                                            <x-primary-button>
+                                                <a href="{{route("books.edit" , ["book" => $book])}}">{{ __('edit') }}</a>
+                                            </x-primary-button>
                                         </td>
+                                        <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                            <form method="POST" action="{{route("books.destroy", ["book" => $book])}}">
+                                                @method("DELETE")
+                                                @csrf
+                                                <x-primary-button>{{ __('delete') }}</x-primary-button>
+                                            </form>
+
+                                        </td>
+                                        @endif
                                     </tr>
                                 @empty
                                     <tr>
@@ -139,11 +157,8 @@
                                     </tr>
 
                                 @endforelse
-
-
                                 </tbody>
                             </table>
-
 
                         </section>
 

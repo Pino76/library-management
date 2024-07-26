@@ -1,3 +1,12 @@
+@php
+    /**
+ *
+ * @var $va App\Enum\UserRoles;
+ *
+ */
+@endphp
+
+
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,11 +32,19 @@
                     </x-nav-link>
                 </div>
 
+                @if(\App\Enum\UserRoles::USER == Auth::user()->role_id)
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" style="border: 1px solid #F00">
-                    <x-nav-link :href="route('books.create')" :active="request()->routeIs('books.create')">
+                        Gestionale utente con libri prenotati, in lista e in scadenza
+                </div>
+                @endif
+
+                @if(\App\Enum\UserRoles::ADMINISTRATOR == Auth::user()->role_id)
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" style="border: 1px solid #F00">
+                    <x-nav-link :href="route('index-admin')" :active="request()->routeIs('index-admin')">
                         CRUD Libro
                     </x-nav-link>
                 </div>
+               @endif
 
             </div>
 

@@ -2,9 +2,9 @@
 
 namespace App\Enum;
 
-enum UserRoles: int
+enum UserRoles
 {
-    case ADMINISTRATOR = 1;
-    case DATAENTRY = 2;
-    case USER = 3;
+    const ADMINISTRATOR = 1;
+    const DATAENTRY = 2;
+    const USER = 3;
 }

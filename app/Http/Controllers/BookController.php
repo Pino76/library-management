@@ -27,20 +27,27 @@ class BookController extends Controller
 
     public function index()
     {
+        /*
         $books = $this->bookService->getAllBooks();
         $genres = $this->genreService->getAllGenre();
 
         return view('book/index', [
             "books" => $books,
             "genres" => $genres
-        ]);
+        ]);*/
+    }
+
+    public function indexAdmin()
+    {
+        return view('book.index-admin');
     }
 
     public function create()
     {
         $genres = $this->genreService->getAllGenre();
-        return view('book/create', [
-            "genres" => $genres
+        return view('book.create-edit', [
+            "genres" => $genres,
+            "book" => new Book()
         ]);
     }
 
@@ -70,7 +77,7 @@ class BookController extends Controller
     public function viewSearch()
     {
         $genres = $this->genreService->getAllGenre();
-        return view('book/search',[
+        return view('book.search',[
             "genres" => $genres,
             "books" => "",
             "bCount" => ""
@@ -80,7 +87,7 @@ class BookController extends Controller
     {
         $books = $this->bookService->searchBook($request);
         $genres = $this->genreService->getAllGenre();
-        return view('book/search', [
+        return view('book.search', [
             "books" => $books,
             "genres" => $genres,
             "bCount" => $books->count()
@@ -90,7 +97,7 @@ class BookController extends Controller
     public function edit(Book $book)
     {
         $genres = $this->genreService->getAllGenre();
-        return view('book.edit', [
+        return view('book.create-edit', [
             "book" => $book,
             "genres" => $genres
         ]);

@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('books', BookController::class);
+    Route::get('index-admin', [BookController::class, 'indexAdmin'])->name('index-admin');
     Route::get('search-book', [BookController::class, 'viewSearch'])->name('view-search');
     Route::post('search-book', [BookController::class, 'search'])->name('search-book');
     Route::put('reserve-book/{book}', [BookController::class, 'reserve'])->name('reserve-book');

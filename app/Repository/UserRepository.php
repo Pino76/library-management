@@ -25,9 +25,21 @@ class UserRepository implements IUserRepository
     }
 
 
+    public function getAllBooksFromUser($userId)
+    {
+        $user = User::find($userId);
+        $books = $user->books()->get();
 
 
+        // Aggiungere il campo virtuale a ciascun libro
+        foreach ($books as $book) {
+            dd($book->pivot->created_at);
+            $book->pivot->is_older_than_five_days = $book->pivot->is_older_than_five_days;
+        }
 
+
+        return $books;
+    }
 
 
 }

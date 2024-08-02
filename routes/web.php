@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::post('search-book', [BookController::class, 'search'])->name('search-book');
     Route::put('reserve-book/{book}', [BookController::class, 'reserve'])->name('reserve-book');
 
+    Route::get('manage-user-books', [UserController::class, 'getAllBooksFromUser'])->name('manage-user-books');
 });
 
 require __DIR__.'/auth.php';

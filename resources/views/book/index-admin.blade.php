@@ -34,7 +34,7 @@
                             </p>
 
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                <a href="{{route('view-search')}}">Per modificare il libro o sospendere il libro</a>
+                                <a href="{{route('view-search')}}">Per modificare il libro</a>
                             </p>
 
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">

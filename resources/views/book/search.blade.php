@@ -18,9 +18,8 @@
 
                         </header>
 
-                        <form method="post" action="{{ route('search-book') }}" class="mt-6 space-y-6">
+                        <form method="post" @submit.prevent="searchBooks" class="mt-6 space-y-6">
                             @csrf
-
                             <div>
                                 <x-input-label for="title" :value="__('Title')"/>
                                 <x-text-input id="title" name="title" type="text" class="mt-1 block w-full"
@@ -56,75 +55,78 @@
                 </div>
             </div>
 
-            @if($bCount != "")
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                        <section>
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead
-                                    class="text-gray-900 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Title
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        isbn
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Author
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Genre
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Quantity
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Available
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Year
-                                    </th>
-                                    @if(Auth::user()->role_id == \App\Enum\UserRoles::USER)
+            <div x-data="{bCount :{{$bCount}} }" x-show="bCount > 0 "
+                 class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
+                 style="border: 1px solid #F00">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+
+                    <section>
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead
+                                class="text-gray-900 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Title
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    isbn
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Author
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Genre
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Quantity
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Available
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Year
+                                </th>
+                                @if(Auth::user()->role_id == \App\Enum\UserRoles::USER)
                                     <th scope="col" class="px-6 py-3">
                                         Reserve
                                     </th>
-                                    @else
+                                @else
                                     <th scope="col" class="px-6 py-3" colspan="2">
                                         Admin Action
                                     </th>
-                                    @endif
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @forelse($books AS $book)
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                           {{$book->title}}
-                                        </td>
-                                        <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            {{$book->isbn}}
-                                        </td>
-                                        <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            {{$book->author}}
-                                        </td>
-                                        <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            {{$book->genere->name}}
-                                        </td>
-                                        <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            {{$book->quantity}}
-                                        </td>
-                                        <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            {{$book->reserve}}
-                                        </td>
-                                        <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            {{$book->year}}
-                                        </td>
-                                        @if(Auth::user()->role_id == \App\Enum\UserRoles::USER)
+                                @endif
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($books AS $book)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                        {{$book->title}}
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                        {{$book->isbn}}
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                        {{$book->author}}
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                        {{$book->genere->name}}
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                        {{$book->quantity}}
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                        {{$book->reserve}}
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                        {{$book->year}}
+                                    </td>
+                                    @if(Auth::user()->role_id == \App\Enum\UserRoles::USER)
                                         <td class="px-6 py-4 font-medium text-gray-900 text-center">
                                             @if($book->reserve > 0 &&  $book->is_assigned == 0 )
-                                                <form method="POST" action="{{route("reserve-book", ["book"=> $book])}}">
+                                                <form method="POST"
+                                                      action="{{route("reserve-book", ["book"=> $book])}}">
                                                     @method("PUT")
                                                     @csrf
                                                     <x-primary-button>{{ __('reserve') }}</x-primary-button>
@@ -133,7 +135,7 @@
                                                 {{$book->reserve == 0 ? 'il libro non è disponibile' : 'il libro è presente nella tua lista' }}
                                             @endif
                                         </td>
-                                        @else
+                                    @else
                                         <td class="px-6 py-4 font-medium text-gray-900 text-center">
                                             <x-primary-button>
                                                 <a href="{{route("books.edit" , ["book" => $book])}}">{{ __('edit') }}</a>
@@ -147,24 +149,24 @@
                                             </form>
 
                                         </td>
-                                        @endif
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="8" class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            nessun record trovato
-                                        </td>
-                                    </tr>
+                                    @endif
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="8" class="px-6 py-4 font-medium text-gray-900 text-center">
+                                        nessun record trovato
+                                    </td>
+                                </tr>
 
-                                @endforelse
-                                </tbody>
-                            </table>
+                            @endforelse
+                            </tbody>
+                        </table>
 
-                        </section>
+                    </section>
 
-                    </div>
                 </div>
-            @endif
+            </div>
+
 
         </div>
     </div>

@@ -32,7 +32,7 @@
                             <div>
                                 <x-input-label for="title" :value="__('Title')"/>
                                 <x-text-input id="title" name="title" type="text" class="mt-1 block w-full"
-                                              :value="old('title', $book->title )"/>
+                                              :value="old('title', $book->title )" x-model="formData.title"/>
                                 <x-input-error class="mt-2" :messages="$errors->get('title')"/>
                             </div>
 
@@ -46,7 +46,7 @@
                             <div>
                                 <x-input-label for="author" :value="__('Author')"/>
                                 <x-text-input id="author" name="author" type="text" class="mt-1 block w-full"
-                                              :value="old('author', $book->author)"/>
+                                              :value="old('author', $book->author)" x-model="formData.author"/>
                                 <x-input-error class="mt-2" :messages="$errors->get('author')"/>
                             </div>
 
@@ -81,10 +81,24 @@
                             </div>
 
                         </form>
+
                     </section>
+
                 </div>
             </div>
 
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    function saveForm() {
+
+    }
+
+</script>
+
+
+
+</body>
+</html>

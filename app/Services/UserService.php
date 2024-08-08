@@ -16,4 +16,9 @@ class UserService implements IUserService
     {
       return  $this->userRepository->getAllBooksFromUser($userId);
     }
+
+    public function findBooksListFromEmail($email)
+    {
+        return$this->userRepository->findBooksListFromEmail($email);
+    }
 }

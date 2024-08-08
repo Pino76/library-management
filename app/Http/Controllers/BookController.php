@@ -8,7 +8,9 @@ use App\Http\Requests\Book\SearchBookRequest;
 use App\Interfaces\Service\IBookService;
 use App\Interfaces\Service\IGenreService;
 use App\Models\Book;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 
 class BookController extends Controller
@@ -61,7 +63,7 @@ class BookController extends Controller
             $request->author ,
             $request->genre_id ,
             $request->quantity ,
-            $request->reserve ,
+            $request->available ,
             $request->year
         );
 
@@ -79,8 +81,8 @@ class BookController extends Controller
         $genres = $this->genreService->getAllGenre();
         return view('book.search',[
             "genres" => $genres,
-            "books" => "",
-            "bCount" => ""
+            "books" => [],
+            "bCount" => 0
         ]);
     }
     public function search(SearchBookRequest $request)
@@ -90,8 +92,7 @@ class BookController extends Controller
         return view('book.search', [
             "books" => $books,
             "genres" => $genres,
-            "bCount" => $books->count()
-        ]);
+            "bCount" => $books->count()]);
     }
 
     public function edit(Book $book)
@@ -112,7 +113,7 @@ class BookController extends Controller
             $request->author ,
             $request->genre_id ,
             $request->quantity ,
-            $book->reserve,
+            $book->available,
             $request->year
         );
         $this->bookService->saveBook($bookDTO, $book);
@@ -132,10 +133,24 @@ class BookController extends Controller
             $book->author ,
             $book->genre_id ,
             $book->quantity ,
-            $book->reserve ,
+            $book->available ,
             $book->year
         );
         $this->bookService->reserveBook($bookDTO, Auth::id());
+    }
+
+    ##Libro preso in prestito
+    ##Azione gestita dall'amministratore
+    public function borrowed(Request $request)
+    {
+       $this->bookService->stateBook($request->all());
+    }
+
+    ##Libro  da riconsegnare
+    ##Azione gestita dall'amministratore
+    public function returned(Request $request)
+    {
+        $this->bookService->stateBook($request->all());
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace App\DTO;
 
+use Illuminate\Support\Facades\Date;
+
 /**
  *
  */
@@ -34,11 +36,12 @@ class BookDTO
     /**
      * @var int|null
      */
-    private ?int $reserve ;
+    private ?int $available ;
     /**
      * @var int|null
      */
     private ?int $year;
+
 
 
     /**
@@ -48,10 +51,10 @@ class BookDTO
      * @param string|null $author
      * @param int|null $genre_id
      * @param int|null $quantity
-     * @param int|null $reserve
+     * @param int|null $available
      * @param int|null $year
      */
-    public function __construct(?int $id , ?string $title, ?string $isbn, ?string $author, ?int $genre_id, ?int $quantity, ?int $reserve, ?int $year)
+    public function __construct(?int $id , ?string $title, ?string $isbn, ?string $author, ?int $genre_id, ?int $quantity, ?int $available, ?int $year)
     {
         $this->setId($id);
         $this->setTitle($title);
@@ -59,7 +62,7 @@ class BookDTO
         $this->setAuthor($author);
         $this->setGenreId($genre_id);
         $this->setQuantity($quantity);
-        $this->setReserve($reserve);
+        $this->setAvailable($available);
         $this->setYear($year);
     }
 
@@ -168,18 +171,18 @@ class BookDTO
     /**
      * @return int|null
      */
-    public function getReserve(): ?int
+    public function getAvailable(): ?int
     {
-        return $this->reserve;
+        return $this->available;
     }
 
     /**
-     * @param int|null $reserve
+     * @param int|null $available
      * @return void
      */
-    public function setReserve(?int $reserve): void
+    public function setAvailable(?int $available): void
     {
-        $this->reserve = $reserve;
+        $this->available = $available;
     }
 
     /**

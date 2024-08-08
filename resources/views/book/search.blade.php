@@ -102,7 +102,7 @@
                             @forelse($books AS $book)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                        {{$book->title}}
+                                     {{$book->id}} - {{$book->title}}
                                     </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 text-center">
                                         {{$book->isbn}}

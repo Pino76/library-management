@@ -48,8 +48,9 @@ class User extends Authenticatable
 
     public function books(): BelongsToMany
     {
-        return $this->belongsToMany(Book::class, 'book_user')->withTimestamps();
-        #return $this->belongsToMany(Book::class)->using(BookUser::class)->withPivot('created_at')->withTimestamps();
+        return $this->belongsToMany(Book::class, 'book_user')
+            ->withPivot('expire_date','borrowed_date','returned_date')
+            ->withTimestamps();
     }
 
 }

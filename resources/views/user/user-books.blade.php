@@ -94,7 +94,11 @@
 
                                     </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                        {{}}
+                                        @if($book->pivot->returned_date != null)
+                                            {{ Carbon\Carbon::parse($book->pivot->returned_date)->format('d-m-Y') }}
+                                        @else
+                                            <span> - </span>
+                                        @endif
                                     </td>
 
                                 </tr>

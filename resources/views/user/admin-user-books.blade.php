@@ -105,6 +105,7 @@
                                                 @method("PUT")
                                                 @csrf
                                                 <input type="hidden" name="pivot" value="{{$book->pivot}}">
+                                                <input type="hidden" name="status" value="borrowed_date">
                                                 <x-primary-button>{{ __('consegnato') }}</x-primary-button>
                                             </form>
                                         @endif
@@ -118,6 +119,7 @@
                                                 @method("PUT")
                                                 @csrf
                                                 <input type="hidden" name="pivot" value="{{$book->pivot}}">
+                                                <input type="hidden" name="status" value="returned_date">
                                                 <x-primary-button>{{ __('consegnato') }}</x-primary-button>
                                             </form>
                                         @elseif($book->pivot->returned_date != null)

@@ -4,6 +4,7 @@ namespace App\Interfaces\Service;
 
 use App\DTO\BookDTO;
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 interface IBookService
@@ -13,4 +14,5 @@ interface IBookService
     public function deleteBook(Book $book);
     public function searchBook(Request $request);
     public function reserveBook(BookDTO $book, $user_id);
+    public function stateBook(array $request);
 }

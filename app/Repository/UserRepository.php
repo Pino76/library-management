@@ -20,7 +20,7 @@ class UserRepository implements IUserRepository
     public function userHasBook($bookId, $userId):bool
     {
         $user = User::find($userId);
-        $hasBook = $user->books()->where('book_id', $bookId)->exists();
+        $hasBook = $user->books()->where('book_id', $bookId)->whereNull('returned_date')->exists();
         return $hasBook;
     }
 
@@ -29,15 +29,13 @@ class UserRepository implements IUserRepository
     {
         $user = User::find($userId);
         $books = $user->books()->get();
+        return $books;
+    }
 
-
-        // Aggiungere il campo virtuale a ciascun libro
-        foreach ($books as $book) {
-            dd($book->pivot->created_at);
-            $book->pivot->is_older_than_five_days = $book->pivot->is_older_than_five_days;
-        }
-
-
+    public function findBooksListFromEmail($email)
+    {
+        $user = User::query()->where('email', $email)->first();
+        $books = $user->books()->get();
         return $books;
     }
 

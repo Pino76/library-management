@@ -7,4 +7,6 @@ interface IUserRepository
     public function userHasBook($bookId, $userId): bool;
 
     public function getAllBooksFromUser($userId);
+
+    public function findBooksListFromEmail($email);
 }

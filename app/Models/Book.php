@@ -15,7 +15,7 @@ class Book extends Model
     public const TABLE_NAME = 'books';
     protected $table = self::TABLE_NAME;
     protected $primaryKey = 'id';
-    protected $fillable = ['title', 'isbn', 'author', 'genre_id', 'quantity', 'reserve', 'year'];
+    protected $fillable = ['title', 'isbn', 'author', 'genre_id', 'quantity', 'available', 'year'];
 
 
     public function genere(): HasOne
@@ -25,6 +25,8 @@ class Book extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'book_user')->withTimestamps();
+        return $this->belongsToMany(User::class, 'book_user')
+            ->withPivot('expire_date','borrowed_date','returned_date')
+            ->withTimestamps();
     }
 }

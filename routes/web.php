@@ -35,8 +35,16 @@ Route::middleware('auth')->group(function () {
     Route::get('search-book', [BookController::class, 'viewSearch'])->name('view-search');
     Route::post('search-book', [BookController::class, 'search'])->name('search-book');
     Route::put('reserve-book/{book}', [BookController::class, 'reserve'])->name('reserve-book');
+    Route::put('borrowed-book', [BookController::class, 'borrowed'])->name('borrowed-book');
+    Route::put('returned-book', [BookController::class, 'returned'])->name('returned-book');
 
-    Route::get('manage-user-books', [UserController::class, 'getAllBooksFromUser'])->name('manage-user-books');
+    Route::get('user-books', [UserController::class, 'getAllBooksFromUser'])->name('user-books');
+    Route::get('admin-user-books', [UserController::class, 'adminSearchUserBooks'])->name('admin-user-books');
+    Route::Post('admin-user-books', [UserController::class, 'adminUserBookList'])->name('search-user-books');
+
+
+
+
 });
 
 require __DIR__.'/auth.php';

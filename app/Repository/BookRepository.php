@@ -3,14 +3,17 @@
 namespace App\Repository;
 
 use App\DTO\BookDTO;
+use App\Enum\BookUtility;
 use App\Enum\UserRoles;
 use App\Interfaces\Repository\IBookRepository;
 use App\Models\Book;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+
 
 class BookRepository implements IBookRepository
 {
@@ -35,12 +38,14 @@ class BookRepository implements IBookRepository
      */
     public function save(BookDTO $bookDTO): Book
     {
-        $userId = Auth::id();
+        $userId = Auth::user()->id;
         return DB::transaction(function() use ($bookDTO, $userId) {
             $bookArray = $bookDTO->toArray();
             $book = Book::updateOrCreate(['id' => $bookDTO->getId()], $bookArray);
-            if($userId == UserRoles::USER){
-                $book->users()->attach($userId);
+            if(Auth::user()->role_id == UserRoles::USER){
+                $book->users()->attach($userId, [
+                    'expire_date' => Carbon::now()->addDays(BookUtility::EXPIRE_DATE_BOOK)
+                ]);
             }
             return $book;
         }, 2);
@@ -66,9 +71,11 @@ class BookRepository implements IBookRepository
         $books = Book::query()
             ->leftJoin('book_user', function ($join) use ($userId) {
                 $join->on('books.id', '=', 'book_user.book_id')
-                    ->where('book_user.user_id', '=', $userId);
+                    ->where('book_user.user_id', '=', $userId)
+                    ->whereNull('book_user.returned_date');
             })
             ->select('books.*', DB::raw('IF(book_user.user_id IS NULL, 0, 1) as is_assigned'))
+
             ->when($bookDTO->getTitle() != "", function ($query) use ($bookDTO) {
                 return $query->where("title", "like", $bookDTO->getTitle());
             })
@@ -81,6 +88,28 @@ class BookRepository implements IBookRepository
             ->get();
 
         return $books;
+    }
+
+    public function savePivot($request)
+    {
+        $data = json_decode($request['pivot'], true);
+        $book = Book::find($data["book_id"]);
+
+       $result = $book->users()->updateExistingPivot($data["user_id"], [
+            $request['status'] => Carbon::now()
+        ]);
+
+       if($result && $request["status"] == BookUtility::RETURNED){
+           $this->booksAvailable($book);
+       }
+
+    }
+
+
+    private function booksAvailable(Book $book)
+    {
+        $book->available = ($book->available + 1);
+        $book->save();
     }
 
 

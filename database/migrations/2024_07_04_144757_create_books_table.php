@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('author');
             $table->integer('genre_id');
             $table->integer('quantity');
-            $table->integer('reserve');;
+            $table->integer('available');;
             $table->integer('year');
             $table->timestamps();
             $table->softDeletes();

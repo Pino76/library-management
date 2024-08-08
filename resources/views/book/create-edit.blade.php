@@ -91,14 +91,6 @@
     </div>
 </x-app-layout>
 
-<script>
-    function saveForm() {
-
-    }
-
-</script>
-
-
 
 </body>
 </html>

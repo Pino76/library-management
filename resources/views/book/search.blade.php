@@ -117,14 +117,14 @@
                                         {{$book->quantity}}
                                     </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                        {{$book->reserve}}
+                                        {{$book->available}}
                                     </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 text-center">
                                         {{$book->year}}
                                     </td>
                                     @if(Auth::user()->role_id == \App\Enum\UserRoles::USER)
                                         <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                            @if($book->reserve > 0 &&  $book->is_assigned == 0 )
+                                            @if($book->available > 0 &&  $book->is_assigned == 0 )
                                                 <form method="POST"
                                                       action="{{route("reserve-book", ["book"=> $book])}}">
                                                     @method("PUT")
@@ -132,7 +132,7 @@
                                                     <x-primary-button>{{ __('reserve') }}</x-primary-button>
                                                 </form>
                                             @else
-                                                {{$book->reserve == 0 ? 'il libro non è disponibile' : 'il libro è presente nella tua lista' }}
+                                                {{$book->available == 0 ? 'il libro non è disponibile' : 'il libro è presente nella tua lista' }}
                                             @endif
                                         </td>
                                     @else

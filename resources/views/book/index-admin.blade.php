@@ -30,19 +30,19 @@
                             </h2>
 
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                <a href="{{route('books.create')}}">Crea Nuovo Libro</a>
+                                <a href="{{route('books.create')}}">Inserisci Nuovo Libro</a>
                             </p>
 
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                <a href="{{route('view-search')}}">Per modificare il libro</a>
+                                <a href="{{route('view-search')}}">Modifica Libro</a>
                             </p>
 
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                Per visualizzare utenti e vedere lo stato dei libri degli utenti
+                                <a href="{{route('admin-user-books')}}">Gestione Libri-Utenti</a>
                             </p>
 
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                Restituzione libro
+                                Stato dei libri
                             </p>
 
 

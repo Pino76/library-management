@@ -13,11 +13,9 @@
                     <section>
                         <header>
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                {{ __('Search Book') }}
+                                {{ __('Manage Book') }}
                             </h2>
-
                         </header>
-
                     </section>
 
                 </div>
@@ -48,10 +46,16 @@
                                     Year
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Preso in prestito
+                                    Reserve
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Da riconsegare
+                                    Borrowed
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    To be returned
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Returned
                                 </th>
                             </tr>
                             </thead>
@@ -77,15 +81,27 @@
                                         {{$book->pivot->created_at->format('d-m-Y')}}
                                     </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 text-center">
-                                        {{$book->pivot->is_older_than_five_days }}
+                                        @if($book->pivot->borrowed_date != null)
+                                            {{ Carbon\Carbon::parse($book->pivot->borrowed_date)->format('d-m-Y') }}
+                                        @else
+                                            <span> - </span>
+                                        @endif
 
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 text-center">
+
+                                        {{ Carbon\Carbon::parse($book->pivot->expire_date)->format('d-m-Y') }}
+
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 text-center">
+                                        {{}}
                                     </td>
 
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="8" class="px-6 py-4 font-medium text-gray-900 text-center">
-                                        nessun libro preso in prestito trovato
+                                        nessun libro preso in prestito
                                     </td>
                                 </tr>
 

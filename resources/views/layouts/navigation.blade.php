@@ -34,9 +34,8 @@
 
                 @if(\App\Enum\UserRoles::USER == Auth::user()->role_id)
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" style="border: 1px solid #F00">
-                    <x-nav-link :href="route('manage-user-books')" :active="request()->routeIs('manage-user-books')">
-                        Gestionale utente con libri prenotati, in lista e in scadenza
-                        ogni utente ha la lista dei libri che ha prenotato e la scadenza di ogni libro
+                    <x-nav-link :href="route('user-books')" :active="request()->routeIs('user-books')">
+                        Gestionale
                     </x-nav-link>
                 </div>
                 @endif
@@ -44,7 +43,7 @@
                 @if(\App\Enum\UserRoles::ADMINISTRATOR == Auth::user()->role_id)
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" style="border: 1px solid #F00">
                     <x-nav-link :href="route('index-admin')" :active="request()->routeIs('index-admin')">
-                        CRUD Libro
+                        Gestionale Libro/utente
                     </x-nav-link>
                 </div>
                @endif
